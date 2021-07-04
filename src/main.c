@@ -5,7 +5,7 @@
 
 char *cdr(char *list)
 {
-  int depth=0;
+  unsigned char depth=0;
   bool flag=0;    
   list = index(list, '(');
   while(list[0] != '\0'){
@@ -28,19 +28,20 @@ char *cdr(char *list)
 
 char *car(char *list)
 {
-  int depth=0, i=0;
+  unsigned char depth=0;
+  unsigned int i=0;
   bool flag=0;    
   list = index(list, '(');
   while(list[i] != '\0'){
     printf("%d %d %c\n", depth, flag, list[i]);
     switch (list[i]){
     case '(':
-      if(depth==1 && flag==1){ list[0] = ' '; list[i-1]=')'; list[i] = '\0'; return list;}
+      if(depth==1 && flag==1){ list[0] = ' '; /* list[i-1]=')'; */ list[i] = '\0'; return list;}
       depth+=1;
       break;
     case ')': depth-=1; break;
     case ' ':
-      if(depth==1 && flag==1){ list[0] = ' '; list[i-1] = ')'; list[i] = '\0'; return list;}
+      if(depth==1 && flag==1){ list[0] = ' '; /* list[i-1] = ')'; */ list[i] = '\0'; return list;}
       break;
     default: if(list[i] != ' ' && list[i] != '(' && depth>=1){ flag=1; } break;
     }
@@ -51,9 +52,8 @@ char *car(char *list)
 
 int main(void)
 {
+  char *list[5][1];
   char list_test[]="(((a)) ((b))(e(f)))";
-  char pop[10];
-  strcpy(pop, car(cdr(list_test)));
-  printf("%s", pop);
+  char nil[] = "nil";
   return 0;
 }
