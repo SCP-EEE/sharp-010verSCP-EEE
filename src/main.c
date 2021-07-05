@@ -3,22 +3,19 @@
 #include <stdlib.h>
 #include <stdbool.h>
 
-#define one_code_size 200
+#define one_code_size 2000
 #define stack_size 10
-#define list_size 50
-#define val_size 30
+#define list_size 500
 
 char nil[] = "nil";
 
 char *cdr(char *list)
 {
   unsigned char depth=0;
-  bool flag=0;    
+  bool flag=0;
   list = index(list, '(');
   while(list[0] != '\0'){
-    #ifndef DEBUG
     printf("depth:%d flag:%d %c\n", depth, flag, list[0]);
-    #endif
     switch (list[0]){
     case '(':
       if(depth==1 && flag==1){ (list-1)[0]='('; return list=list-1; }
@@ -39,12 +36,10 @@ char *car(char *list)
 {
   unsigned char depth=0;
   unsigned int i=0;
-  bool flag=0;    
+  bool flag=0;
   list = index(list, '(');
   while(list[i] != '\0'){
-    #ifndef DEBUG
     printf("depth:%d flag:%d %c\n", depth, flag, list[i]);
-    #endif
     switch (list[i]){
     case '(':
       if(depth==1 && flag==1){ list[0] = ' '; /* list[i-1]=')'; */ list[i] = '\0'; return list;}
@@ -58,43 +53,26 @@ char *car(char *list)
     }
     i+=1;
   }
-  return list;
+  list[0] = ' '; *index(list, ')')=' '; return list;
 }
 
-void list_up(char *check_list, char *list, char **list_val){
-  unsigned char depth=0;
-  unsigned int list_index=0, n=0, m=0, chklist_index=0;
-  bool flag=0;
-  list = index(list, '(');
-  while(check_list[chklist_index] != '\0'){
-    #ifndef DEBUG
-    printf("depth:%d flag:%d %c\n", depth, flag, check_list[chklist_index]);
-    #endif
-    switch (check_list[chklist_index]){
-    case '(':
-      if(depth==1 && flag==1){  }
-      list[list_index] = list[2+list_index];
-      list[1+list_index] = *nil;
-      depth+=1;
-      break;
-    case ')': depth-=1; break;
-    case ' ':
-      if(depth==1 && flag==1){  }
-      break;
-    default: if(check_list[chklist_index] != ' ' && check_list[chklist_index] != '('){ list_val[m==val_size ? n++ : n][m==val_size ? m=0 : m++] = check_list[chklist_index]; list[strcmp(list[list_index], "nil") ? 2+list_index : list_index] = list_val[m-1]; } if(depth>=1){ flag=1; } break;
-    }
-    list_index+=1;
-  }
+char *cons(char *cons_list, char *car_list, char *cdr_list)
+{
+  char copy_list[list_size];
+  strcpy(copy_list, cdr_list);
+  strcpy(cons_list, "(");
+  strcat(cons_list, car_list);
+  strcat(cons_list, car(copy_list));
+  strcat(cons_list, ")");
+  return cons_list;
 }
 
 int main(void)
 {
-  char list_val[list_size][val_size];
-  char *list[list_size];
   int S[stack_size];
-  char *E[list_size];
-  char *C[one_code_size];
-  char *D[list_size];
+  char E[list_size];
+  char C[one_code_size];
+  char D[list_size];
   char list_test[]="((a) (b (c)))";
   return 0;
 }
