@@ -3,6 +3,10 @@
 #include <stdlib.h>
 #include <stdbool.h>
 
+#define one_code_size 200
+#define stack_size 10
+#define list_size 50
+
 char *cdr(char *list)
 {
   int depth=0;
@@ -51,9 +55,19 @@ char *car(char *list)
 
 int main(void)
 {
-  char list_test[]="(((a)) ((b))(e(f)))";
-  char pop[10];
-  strcpy(pop, car(cdr(list_test)));
-  printf("%s", pop);
+  char list_val[list_size][30];
+  char *list[list_size];
+  int S[stack_size];
+  char *E[list_size];
+  char *C[one_code_size];
+  char *D[list_size];
+  char list_test[]="((a) (b (c)))";
+  strcpy(list_val[0], list_test);
+  car(list_val[0]);
+  list[0] = list_val[0];
+  strcpy(list_val[1], list_test);
+  cdr(list_val[1]);
+  list[1] = list_val[1];
+  printf("%s %s", list[0], list[1]);
   return 0;
 }
